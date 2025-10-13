@@ -62,7 +62,7 @@ http://localhost:8080/saludar?nombre=Jose
 
 1.  **Clonar el Repositorio:**
     ```bash
-    git clone [https://aws.amazon.com/es/what-is/repo/](https://aws.amazon.com/es/what-is/repo/)
+    https://github.com/Jedua/PISII.git
     cd hola-microservicio
     ```
 
