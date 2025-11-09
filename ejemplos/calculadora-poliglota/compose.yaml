@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  
+  # 1. Servicio Java (Spring Boot)
+  servicio-java:
+    build:
+      context: . 
+    container_name: servicio-java
+    ports:
+      - "8080:8080" 
+    environment:
+      - C_SERVICE_URL=http://servicio-c:8081/sumar
+
+  # 2. Servicio C (El sumador)
+  servicio-c:
+    build:
+      context: ./servicio-c  
+    container_name: servicio-c
+    expose:
+      - "8081"

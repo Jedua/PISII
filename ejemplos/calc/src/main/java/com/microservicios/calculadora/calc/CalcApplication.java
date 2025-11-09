@@ -1,13 +1,13 @@
-package com.example.Calculadora;
+package com.microservicios.calculadora.calc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CalculadoraApplication {
+public class CalcApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CalculadoraApplication.class, args);
+		SpringApplication.run(CalcApplication.class, args);
 	}
 
 }
