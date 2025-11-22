@@ -1,0 +1,35 @@
+# 1. EL DEPLOYMENT (La "Fábrica" de Pods)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-suma # Nombre del administrador
+spec:
+  replicas: 1           # ¡Queremos 1 copia funcionando!
+  selector:
+    matchLabels:
+      app: servicio-suma
+  template:             # Plantilla para crear el contenedor
+    metadata:
+      labels:
+        app: servicio-suma
+    spec:
+      containers:
+      - name: contenedor-suma
+        image: servicio-suma:v1      # <--- La imagen que acabamos de construir
+        imagePullPolicy: Never       # <--- IMPORTANTE: "No busques en internet, usa la local"
+        ports:
+        - containerPort: 8081
+
+---
+# 2. EL SERVICE (El "Recepcionista" / DNS)
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicio-suma   # <--- ¡ESTE ES EL NOMBRE DNS! (Igual que en docker-compose)
+spec:
+  type: ClusterIP       # Solo accesible desde dentro del cluster (Privado)
+  selector:
+    app: servicio-suma  # Busca los Pods con esta etiqueta
+  ports:
+  - port: 8081          # Puerto del "Servicio" (Recepcionista)
+    targetPort: 8081    # Puerto del "Pod" (Trabajador)

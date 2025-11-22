@@ -1,0 +1,55 @@
+# Ya no necesitamos 'version', como dijo el warning
+networks:
+  calculadora-net:
+
+services:
+  
+  # === 1. SERVICIO JAVA ===
+  servicio-java:
+    build: .  # <-- CORRECTO. El Dockerfile de Java está aquí.
+    container_name: servicio-java
+    ports:
+      - "8080:8080"
+    networks:
+      - calculadora-net
+    depends_on: 
+      - servicio-suma
+      - servicio-resta
+      - servicio-multi
+      - servicio-divi
+
+  # === 2. SERVICIO SUMA ===
+  servicio-suma:
+    build: ../servicio-suma  # <-- CORREGIDO: Sube un nivel
+    container_name: servicio-suma
+    networks:
+      - calculadora-net
+    expose:
+      - "8081"
+
+  # === 3. SERVICIO RESTA ===
+  servicio-resta:
+    build: ../servicio-resta # <-- CORREGIDO: Sube un nivel
+    container_name: servicio-resta
+    networks:
+      - calculadora-net
+    expose:
+      - "8081"
+
+  # === 4. SERVICIO MULTI ===
+  servicio-multi:
+    build: ../servicio-multi # <-- CORREGIDO: Sube un nivel
+    container_name: servicio-multi
+    networks:
+      - calculadora-net
+    expose:
+      - "8081"
+
+  # === 5. SERVICIO DIVI ===
+  servicio-divi:
+    build: ../servicio-divi # <-- CORREGIDO: Sube un nivel
+    container_name: servicio-divi
+    networks:
+      - calculadora-net
+    expose:
+      - "8081"

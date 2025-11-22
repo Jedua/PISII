@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-java
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicio-java
+  template:
+    metadata:
+      labels:
+        app: servicio-java
+    spec:
+      containers:
+      - name: contenedor-java
+        image: servicio-java:v1  # Tu imagen de Java
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        # No necesitamos 'env' porque application.properties 
+        # ya apunta a http://servicio-suma:8081, etc.
+        # y Kubernetes ha creado esos DNS names por nosotros.
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicio-java
+spec:
+  type: LoadBalancer  # <--- ¡IMPORTANTE! Nos permite entrar desde fuera
+  selector:
+    app: servicio-java
+  ports:
+  - port: 8080        # Puerto al que llamaremos
+    targetPort: 8080  # Puerto del contenedor

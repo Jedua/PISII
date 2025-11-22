@@ -1,0 +1,46 @@
+# === 1. LIMPIAR
+docker stop servicio-java servicio-c
+docker rm servicio-java servicio-c
+docker network rm mi-red-poliglota
+
+# === 2. CONSTRUIR IMÁGENES ===
+# (En la terminal de la carpeta 'servicio-c')
+docker build -t sumador-c .
+
+# (En la terminal de la carpeta 'calculadora-poliglota')
+docker build -t calculadora-java .
+
+# === 3. CREAR LA RED ===
+# (DNS) privada para los contenedores
+docker network create mi-red-poliglota
+
+# === 4. INICIAR CONTENEDORES ===
+# Primero el backend (C)
+docker run -d --network mi-red-poliglota --name servicio-c sumador-c
+
+# Segundo el frontend (Java)
+docker run -d --network mi-red-poliglota -p 8080:8080 -e C_SERVICE_URL=http://servicio-c:8081/sumar --name servicio-java calculadora-java
+docker run -d --network mi-red-poliglota -p 8080:8080 --name servicio-java calculadora-java
+
+# === 5. PROBAR ===
+# Abrir en el navegador:
+# http://localhost:8080/sumar?num1=10&num2=20
+
+
+########################--------------###########################
+
+# Probar en WSL fedora 42
+# se llama 'calculadora-poliglota', entra en él.
+cd ~/proyectos/pisii/calculadora-poliglota
+# ejecutar para construir todo
+docker compose up --build
+
+########################--------------###########################
+# comandos basicos de docker
+# visualiza los contenedores
+docker ps -a
+# entrar a un contenedor
+docker exec -it <nombre-del-contenedor> bash
+docker exec -it servicio-suma bash
+docker logs -f servicio-suma
+docker logs servicio-suma
